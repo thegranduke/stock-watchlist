@@ -1,5 +1,11 @@
 import json
 import yfinance as yf
+import google.generativeai as genai
+from dotenv import load_dotenv
+import os
+import requests
+
+load_dotenv()
 
 WATCHLIST = 'watchlist.txt'
 
@@ -64,9 +70,34 @@ def fetch_stock_data(ticker):
         return None
     
 
-# import google.generativeai as genai
+def get_news(ticker_symbol):
+    # Your NewsAPI key
+    api_key = os.getenv('NEWS_API_KEY')
 
-# genai.configure(api_key="YOUR_API_KEY")
-# model = genai.GenerativeModel("gemini-1.5-flash")
-# response = model.generate_content("Explain how AI works")
-# print(response.text)
+    # Stock symbol (e.g., "AAPL" for Apple)
+    stock_symbol = ticker_symbol
+
+    # Define the endpoint URL with pageSize parameter to limit results to 5 articles
+    url = f'https://newsapi.org/v2/everything?q={stock_symbol}&sortBy=publishedAt&pageSize=5&apiKey={api_key}'
+
+    # Make the request
+    response = requests.get(url)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        news_data = response.json()
+        articles = news_data['articles']
+        
+        # Print out the articles
+        articles_data = []
+        for article in articles:
+            article_data ={
+                'title': article['title'],
+                'description': article['description'],
+                'url': article['url']
+            }
+            articles_data.append(article_data)
+        return articles_data
+    else:
+        print("Error fetching news")
+        return None

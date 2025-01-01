@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from utils import load_watchlist, save_watchlist, fetch_stock_data
+from utils import load_watchlist, save_watchlist, fetch_stock_data,get_news
 import json
 
 
@@ -72,6 +72,21 @@ def remove(ticker):
         flash(f'{ticker} not in list', 'error')
 
     return redirect(url_for('index'))
+
+@app.route('/get_news/<ticker>')
+def load_news(ticker):
+    news = get_news(ticker)
+
+    # Fetch all stocks data as you did in the index route
+    tickers = load_watchlist()
+    stocks_data = []
+    for ticker in tickers:
+        data = fetch_stock_data(ticker.strip("'").strip('"'))
+        if data:
+            stocks_data.append(data)
+
+    # Render the template with both stocks data and news
+    return render_template('index.html', stocks=stocks_data, news=news)
 
 
 if __name__ == '__main__':

@@ -36,6 +36,7 @@
                     <th>Low</th>
                     <th>Volume</th>
                     <th>Actions</th>
+                    <th>News</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,6 +51,7 @@
                         <td>{{ stock.low }}</td>
                         <td>{{ stock.volume }}</td>
                         <td> <a href=" {{ url_for('remove', ticker=stock.ticker) }} ">Remove</a></td>
+                        <td><a href="{{ url_for('load_news', ticker=stock.ticker) }}">Get News</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -57,6 +59,21 @@
     {% else %}
         <p>No stocks in watchlist</p>
 
+    {% endif %}
+    
+
+    {% if news %}
+        <div class="news-articles">
+            <h2>Recent News :</h2>
+            <ul>
+                {% for article in news %}
+                    <li>
+                        <strong><a href="{{ article.url }}" target="_blank">{{ article.title }}</a></strong><br>
+                        <p>{{ article.description }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
     
 </body>

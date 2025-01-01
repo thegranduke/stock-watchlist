@@ -1,3 +1,2 @@
-TSLA
-AAPL
 NVDA
+AAPL
