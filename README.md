@@ -22,6 +22,7 @@ This is a simple Flask web application designed to help you track a personalized
 ## Requirements
 
 *   Python 3.7+ (Recommended)
+*   Nodejs
 *   Flask
 *   yfinance
 *   requests
